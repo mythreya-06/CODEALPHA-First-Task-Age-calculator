@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <form id="ageForm">
+            <label for="dob">Enter Date of Birth:</label><br>
+            <input type="date" id="dob" required><br>
+            <button type="submit">Calculate Age</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('ageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const dob = new Date(document.getElementById('dob').value);
+            const today = new Date();
+
+            const years = today.getFullYear() - dob.getFullYear();
+            const months = today.getMonth() - dob.getMonth() + (years * 12);
+            const days = Math.floor((today - dob) / (1000 * 60 * 60 * 24));
+            const seconds = Math.floor((today - dob) / 1000);
+
+            let actualYears = years;
+            let actualMonths = today.getMonth() - dob.getMonth();
+            let actualDays = today.getDate() - dob.getDate();
+
+            if (actualMonths < 0 || (actualMonths === 0 && actualDays < 0)) {
+                actualYears--;
+                actualMonths += 12;
+            }
+
+            if (actualDays < 0) {
+                const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                actualDays += prevMonth;
+                actualMonths--;
+            }
+
+            const result = document.getElementById('result');
+
+            if (isNaN(years)) {
+                result.textContent = "Please enter a valid date.";
+            } else {
+                result.innerHTML = `Your age is:<br>
+                    <strong>${actualYears}</strong> years,<br>
+                    <strong>${actualMonths}</strong> months,<br>
+                    <strong>${actualDays}</strong> days,<br>
+                    and <strong>${seconds}</strong> seconds.`;
+            }
+        });
+    </script>
+</body>
+</html>
